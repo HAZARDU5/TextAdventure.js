@@ -85,17 +85,17 @@
 var gameData = {
     commandCounter : 0,
     gameOver : false,
-    introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the comedy " +
+    cannibalLocation: 'Woods',
+    introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the horror-comedy" +
                 "song 'Actual Cannibal Shia LaBeouf' by Rob Cantor.",
     outroText : 'Thanks for playing!',
     player : {
         currentLocation : 'Woods',
         inventory : {},
-        lightSource : false,
-        cannibalLocation: 'Woods'
+        lightSource : false
     },
     map : {
-        'Woods' : {
+        Woods : {
             firstVisit : true,
             displayName : 'Woods',
             description : "You're walking in the woods, it's dark and eerie.",
@@ -114,8 +114,12 @@ var gameData = {
                     return "There's no one around. " + (getCannibalLocation() == 'Woods') ? 'You feel a chill run up ' +
                     'your spine; something moves in the bushes nearby!' : ''
                 } },
-                something : {  look : this.map.Woods.textStrings.somethingMoves },
-                bushes : {  look : this.map.Woods.textStrings.somethingMoves }
+                something : {  look : function(){
+                    return getTextString('Woods','somethingMoves')
+                } },
+                bushes : {  look : function(){
+                    return getTextString('Woods','somethingMoves')
+                } },
             },
             items : {
 
@@ -162,4 +166,11 @@ module.exports.gameActions = gameActions;
 
 function getCannibalLocation(){
     return gameData.cannibalLocation;
+}
+
+function getTextString(mapRoom,string){
+
+    console.log(gameData);
+
+    return gameData.map[mapRoom].textStrings[string];
 }
