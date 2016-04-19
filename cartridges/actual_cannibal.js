@@ -81,11 +81,14 @@
      You're finally safe from Shia Labeouf ...
      */
 
+var moment = require('moment');
+
 // === Game Data ===
 var gameData = {
     commandCounter : 0,
     gameOver : false,
     cannibalLocation: 'Woods',
+    timeOfDay: moment("20:05:00", "HH:mm:ss"),
     introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the horror-comedy" +
                 "song 'Actual Cannibal Shia LaBeouf' by Rob Cantor.",
     outroText : 'Thanks for playing!',
@@ -98,7 +101,7 @@ var gameData = {
         Woods : {
             firstVisit : true,
             displayName : 'Woods',
-            description : "You're walking in the woods, it's dark and eerie.",
+            description : "You're walking in the woods.",
             textStrings: {
                 somethingMoves: function(){
                     if(getCannibalLocation() == 'Woods'){
@@ -146,7 +149,7 @@ var gameData = {
 
             },
             teardown: function(){
-
+                incrementTimeOfDay();
             }
         }
     }
@@ -154,8 +157,37 @@ var gameData = {
 
 // === Game Actions ===
 var gameActions = {
+    time: function(){
 
-}
+        var string;
+
+        switch(getTimeOfDay()){
+            case 'dusk':
+                string = "You look up at the sky. The sky is fading to purple and it's getting hard to see. You feel cold.";
+                break;
+            case 'night':
+                string = "You look up at the sky. It's the middle of the night and you can barely see anything. You feel cold.";
+                break;
+            case 'dawn':
+                string = "You look up at the sky. Golden light is filling the sky as dawn breaks. The sound of crows in the distance fills the air.";
+                break;
+            case 'morning':
+                string = "You look up at the sky. A light morning breeze cools your skin as you gaze at the morning sun.";
+                break;
+            case 'midday':
+                string = "You look up at the sky. The sun is high in the sky and beating down on you.";
+                break;
+            case 'afternoon':
+                string = "You look up at the sky. It's the afternoon and a chill breeze is starting to kick up.";
+                break;
+            case 'late-afternoon':
+                string = "You look up at the sky. The sky is filled with fire; golden orange and yellow. Shadows stretch long away from you, clawing at your ankles. You feel cold.";
+                break;
+        }
+
+        return string;
+    }
+};
 
 // === Necessary Exports ===
 module.exports.gameData = gameData;
@@ -163,6 +195,32 @@ module.exports.gameActions = gameActions;
 
 // === Helper Functions ===
 
+function getTimeOfDay(){
+
+    var timeString;
+
+    if(gameData.timeOfDay.isAfter('20:00') && gameData.timeOfDay.isBefore('22:00')){
+        timeString = 'dusk'
+    }else if(gameData.timeOfDay.isAfter('22:00') && gameData.timeOfDay.isBefore('05:00')){
+        timeString = 'night'
+    }else if(gameData.timeOfDay.isAfter('05:00') && gameData.timeOfDay.isBefore('06:00')){
+        timeString = 'dawn'
+    }else if(gameData.timeOfDay.isAfter('06:00') && gameData.timeOfDay.isBefore('12:00')){
+        timeString = 'morning'
+    }else if(gameData.timeOfDay.isAfter('12:00') && gameData.timeOfDay.isBefore('13:00')){
+        timeString = 'midday'
+    }else if(gameData.timeOfDay.isAfter('13:00') && gameData.timeOfDay.isBefore('19:00')){
+        timeString = 'afternoon'
+    }else if(gameData.timeOfDay.isAfter('19:00') && gameData.timeOfDay.isBefore('20:00')){
+        timeString = 'late-afternoon'
+    }
+
+    return timeString;
+}
+
+function incrementTimeOfDay(){
+    gameData.timeOfDay.add(5, 'minutes');
+}
 
 function getCannibalLocation(){
     return gameData.cannibalLocation;
