@@ -62,6 +62,8 @@ exports.input = function(input, gameID){
 	}
 };
 
+exports.games = games;
+
 // ----------------------------\
 // === Game Setup Functions ===========================================================================================
 // ----------------------------/
@@ -88,6 +90,8 @@ function loadCartridge(gameID, gameName){
 	}
 	try {
 		delete require.cache[require.resolve('../cartridges/'+gameName+'.js')];
+
+
 
 		try {
 			var file = require('../cartridges/'+gameName+'.js');
