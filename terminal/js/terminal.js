@@ -1,7 +1,12 @@
 $(function(){
 	// ===== Onload Functions ===========================================================
 	displayResize();
-	messageServer('get games');
+	messageServer('get games',function(){
+		messageServer('die',function(){
+			messageServer('load actual_cannibal');
+		});
+	});
+
 
 	// ===== Event Handlers =============================================================
 	// ----- Input Submit ---------------------------------------------------------------
@@ -48,9 +53,12 @@ $(function(){
 
 // ===== Functions ======================================================================
 // ----- Send Message to Server ---------------------------------------------------------
-function messageServer(message){
+function messageServer(message,callback){
 	$.post(window.location.href+'console', {"input": message}, function(data) {
 		toScreen(data.response,'console');
+		if(typeof callback != 'undefined'){
+			callback();
+		}
 	}).fail(function(){
 		toScreen('Unable to reach server.','terminal');
 	});
