@@ -28,5 +28,10 @@
     "express": "^4.12.0",
     "express-session": "^1.10.3",
     "open": "^0.0.5"
+  },
+  "devDependencies": {
+    "chokidar": "^1.4.3",
+    "connect-livereload": "^0.5.4",
+    "livereload": "^0.4.1"
   }
 }

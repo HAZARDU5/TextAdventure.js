@@ -1,11 +1,31 @@
 // === Server Flags ===
-var debugMode = false;
+var debugMode = true;
+
+// === Initialize Live Reload ===
+
+if(debugMode){
+	livereload = require('livereload');
+	server = livereload.createServer();
+	server.watch(__dirname);
+}
+
+
 
 // === Initilize Express ===
 var express = require('express');
 var bodyParser = require('body-parser');
-var session = require('express-session')
+var session = require('express-session');
 var app = express();
+
+// === Create Console ===
+var con = require('./console/console.js');
+
+if(debugMode) {
+	app.use(require('connect-livereload')({
+		port: 35729,
+		ignore: ['.md', '.txt']
+	}));
+}
 
 // === Import Necessary Functionality ==
 app.use(bodyParser.json());
@@ -20,8 +40,7 @@ var server = app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
 
-// === Create Console ===
-var con = require('./console/console.js');
+
 
 // // === Open Browser ===
 var open = require('open');
