@@ -2,6 +2,12 @@
 
 TextAdventure.js is a text adventure engine that runs on [Node.js](http://nodejs.org/) and makes use of [Express](http://expressjs.com/). A live demo can be seen [here](http://textadventure-thebroox.rhcloud.com/). The project has four main components: a simple server, a retro command line inspired web interface known as the Terminal, the text adventure engine itself colloquially called the Console and finally the cartridges (games) which are made up of two JavaScript objects. Each of these components is further explained its respective section below.
 
+## Installation
+
+You must have node.js installed on your development machine or server.
+
+*	`npm install`
+
 ## Server
 
 The server is an extremely simple Node.js file. It fires up an instance of an Express server on port 3000 to which it serves the Terminal. All AJAX requests made to it are quickly passed to the Console to be executed. Responses are then dispatched back to the Terminal. To get TextAdventure up and running on port 3000 simply run the following command from the project's folder:

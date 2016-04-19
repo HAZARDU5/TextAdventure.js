@@ -1,5 +1,5 @@
 // === Debug Variable ===
-var debugMode = false;
+var debugMode = true;
 
 // === Import Necessary Functionality ===
 var fileSystem = require('fs');
@@ -88,10 +88,27 @@ function loadCartridge(gameID, gameName){
 	}
 	try {
 		delete require.cache[require.resolve('../cartridges/'+gameName+'.js')];
-		var file = require('../cartridges/'+gameName+'.js');
-		games[gameID] = {gameData: file.gameData, gameActions: file.gameActions};
-		games[gameID].gameData.gameID = gameID;
-		return games[gameID].gameData.introText + '\n' + getLocationDescription(games[gameID].gameData);
+
+		try {
+			var file = require('../cartridges/'+gameName+'.js');
+			games[gameID] = {gameData: file.gameData, gameActions: file.gameActions};
+			games[gameID].gameData.gameID = gameID;
+			console.log('Loading... '+gameID);
+			return games[gameID].gameData.introText + '\n' + getLocationDescription(games[gameID].gameData);
+		} catch(loadCartridgeError){
+			var line = loadCartridgeError.stack.split('\n')[1];
+
+			debug('---Failed to load cartridge for '+gameName);
+			debug('---Stack trace:');
+			debug('-----'+loadCartridgeError.message);
+			debug('-----'+line);
+
+			if(debugMode){
+				return "Could not load " + gameName + " Error: "+loadCartridgeError.message+" "+line;
+			}else{
+				return "Could not load " + gameName;
+			}
+		}
 	} catch(error){
 		return "Could not load " + gameName;
 	}
