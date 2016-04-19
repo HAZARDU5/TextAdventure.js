@@ -89,8 +89,10 @@ var gameData = {
     gameOver : false,
     cannibalLocation: 'Woods',
     timeOfDay: moment("20:05:00", "HH:mm:ss"),
-    introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the horror-comedy" +
-                "song 'Actual Cannibal Shia LaBeouf' by Rob Cantor.",
+    introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the horror-comedy " +
+                "song 'Actual Cannibal Shia LaBeouf' by Rob Cantor. This game supports time of day, meaning that the " +
+                "in-game time will advance by 5 minutes every action you take. This may affect your ability to see in " +
+                "the dark and will have hidden consequences as the game progresses....",
     outroText : 'Thanks for playing!',
     player : {
         currentLocation : 'Woods',
@@ -149,6 +151,10 @@ var gameData = {
 
             },
             teardown: function(){
+
+            },
+            updateLocation: function(){
+                //this function is run every time an action is taken
                 incrementTimeOfDay();
             }
         }
@@ -157,35 +163,50 @@ var gameData = {
 
 // === Game Actions ===
 var gameActions = {
-    time: function(){
+    time: function(game,command,consoleInterface){
 
-        var string;
+        console.log('Running cartridge command: time');
 
-        switch(getTimeOfDay()){
+        //console.log(game.timeOfDay);
+
+        var outputString;
+
+        var timeString = getTimeOfDay();
+
+        console.log('TimeString: '+timeString);
+
+        switch(timeString){
             case 'dusk':
-                string = "You look up at the sky. The sky is fading to purple and it's getting hard to see. You feel cold.";
+                outputString = "You look up at the sky. Everything is fading to indigo and purple. It's getting hard to see. You feel cold.";
                 break;
             case 'night':
-                string = "You look up at the sky. It's the middle of the night and you can barely see anything. You feel cold.";
+                outputString = "You look up at the sky. It's the middle of the night and you can barely see anything. You feel cold.";
                 break;
             case 'dawn':
-                string = "You look up at the sky. Golden light is filling the sky as dawn breaks. The sound of crows in the distance fills the air.";
+                outputString = "You look up at the sky. Golden light fills your view as dawn breaks. The sound of crows in the distance fills the air.";
                 break;
             case 'morning':
-                string = "You look up at the sky. A light morning breeze cools your skin as you gaze at the morning sun.";
+                outputString = "You look up at the sky. A light morning breeze cools your skin as you gaze at the morning sun.";
                 break;
             case 'midday':
-                string = "You look up at the sky. The sun is high in the sky and beating down on you.";
+                outputString = "You look up at the sky. The sun is high above the horizon and beating down on you.";
                 break;
             case 'afternoon':
-                string = "You look up at the sky. It's the afternoon and a chill breeze is starting to kick up.";
+                outputString = "You look up at the sky. It's the afternoon and a chill breeze is starting to kick up.";
                 break;
-            case 'late-afternoon':
-                string = "You look up at the sky. The sky is filled with fire; golden orange and yellow. Shadows stretch long away from you, clawing at your ankles. You feel cold.";
+            case 'evening':
+                outputString = "You look up at fire-filled sky; golden orange and yellow. Shadows stretch long away from you, clawing at your ankles. You feel cold.";
+                break;
+            default:
+                outputString = "You look up at the sky. It's dark all around. You have no idea what time of day it is.";
                 break;
         }
 
-        return string;
+        return outputString;
+    },
+
+    wait: function(game,command,consoleInterface){
+        return "You wait for a while...";
     }
 };
 
@@ -199,21 +220,39 @@ function getTimeOfDay(){
 
     var timeString;
 
-    if(gameData.timeOfDay.isAfter('20:00') && gameData.timeOfDay.isBefore('22:00')){
+    console.log('Current time: '+gameData.timeOfDay.toString());
+
+
+
+    var time8pm = new moment().set({hour:20,minute:0});
+    var time9pm = new moment().set({hour:21,minute:0});
+    var time5am = new moment().set({hour:5,minute:0});
+    var time6am = new moment().set({hour:6,minute:0});
+    var time12pm = new moment().set({hour:12,minute:0});
+    var time1pm = new moment().set({hour:13,minute:0});
+    var time6pm = new moment().set({hour:18,minute:0});
+
+    console.log('Is after 8pm?: '+gameData.timeOfDay.isAfter(time8pm));
+    console.log('Is before 9pm?: '+gameData.timeOfDay.isBefore(time9pm));
+
+    if(gameData.timeOfDay.isAfter(time8pm) && gameData.timeOfDay.isBefore(time9pm)){
+        console.log('It is dusk');
         timeString = 'dusk'
-    }else if(gameData.timeOfDay.isAfter('22:00') && gameData.timeOfDay.isBefore('05:00')){
+    }else if(gameData.timeOfDay.isAfter(time9pm) && gameData.timeOfDay.isBefore(time5am)){
         timeString = 'night'
-    }else if(gameData.timeOfDay.isAfter('05:00') && gameData.timeOfDay.isBefore('06:00')){
+    }else if(gameData.timeOfDay.isAfter(time5am) && gameData.timeOfDay.isBefore(time6am)){
         timeString = 'dawn'
-    }else if(gameData.timeOfDay.isAfter('06:00') && gameData.timeOfDay.isBefore('12:00')){
+    }else if(gameData.timeOfDay.isAfter(time6am) && gameData.timeOfDay.isBefore(time12pm)){
         timeString = 'morning'
-    }else if(gameData.timeOfDay.isAfter('12:00') && gameData.timeOfDay.isBefore('13:00')){
+    }else if(gameData.timeOfDay.isAfter(time12pm) && gameData.timeOfDay.isBefore(time1pm)){
         timeString = 'midday'
-    }else if(gameData.timeOfDay.isAfter('13:00') && gameData.timeOfDay.isBefore('19:00')){
+    }else if(gameData.timeOfDay.isAfter(time1pm) && gameData.timeOfDay.isBefore(time6pm)){
         timeString = 'afternoon'
-    }else if(gameData.timeOfDay.isAfter('19:00') && gameData.timeOfDay.isBefore('20:00')){
-        timeString = 'late-afternoon'
+    }else if(gameData.timeOfDay.isAfter(time6pm) && gameData.timeOfDay.isBefore(time8pm)){
+        timeString = 'evening'
     }
+
+    console.log('Timestring: '+timeString);
 
     return timeString;
 }
