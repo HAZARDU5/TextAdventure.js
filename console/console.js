@@ -390,7 +390,20 @@ function itemsToString(itemsObject){
 
 function interact(game, interaction, subject){
 	try{
-		return message = getCurrentLocation(game).items[subject].interactions[interaction];
+		if(getCurrentLocation(game).items[subject] === undefined && getCurrentLocation(game).interactables[subject] === undefined){
+			//interactable is not in current location - check if it is held item
+			if(game.player.inventory[subject] !== undefined){
+				if(typeof game.player.inventory[subject].interactions[interaction] === 'function'){
+					return message = game.player.inventory[subject].interactions[interaction]();
+				}else if(typeof game.player.inventory[subject].interactions[interaction] === 'string'){
+					return message = game.player.inventory[subject].interactions[interaction];
+				}else{
+					return message = getCurrentLocation(game).items[subject].interactions[interaction];
+				}
+			}
+		}else{
+			return message = getCurrentLocation(game).items[subject].interactions[interaction];
+		}
 	} catch(error) {
 		return getCurrentLocation(game).interactables[subject][interaction];
 	}
