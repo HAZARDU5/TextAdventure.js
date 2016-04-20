@@ -6,30 +6,39 @@ module.exports = function(gameMethods){
     
     console.log('Created instance of Woods');
 
+    console.log(_gameMethods);
+
+    var textStrings = {
+        somethingMoves: function(){
+            if(_gameMethods.getCannibalLocation() == 'Woods'){
+                return "Out of the corner of your eye you spot him: Shia LaBeouf. He emerges from the bushes, " +
+                    "following you about 30 feet back."
+            }else{
+                return "You think you see something. But it turns out to be the wind rustling the trees."
+            }
+        }
+    };
+
     return {
         firstVisit : true,
         displayName : 'Woods',
         description : "You're walking in the woods.",
-        textStrings: {
-            somethingMoves: function(){
-                if(_gameMethods.getCannibalLocation() == 'Woods'){
-                    return "Out of the corner of your eye you spot him: Shia LaBeouf. He emerges from the bushes, " +
-                        "following you about 30 feet back."
-                }else{
-                    return "You think you see something. But it turns out to be the wind rustling the trees."
-                }
-            }
-        },
         interactables : {
-            woods : { look : function(){
-                return "There's no one around. " + (_gameMethods.getCannibalLocation() == 'Woods') ? 'You feel a chill run up ' +
-                'your spine; something moves in the bushes nearby!' : ''
-            } },
-            something : {  look : function(){
-                return _gameMethods.getTextStringMap('Woods','somethingMoves')
-            } },
+            //NOTE: look actions for interactables can only contain text strings
+            woods : {
+                look : "There's no one around."
+            },
+            something : {
+                look : function(){
+                    console.log('Looking at something!');
+
+                    console.log('Gamemethods: ',_gameMethods);
+
+                    return textStrings.somethingMoves();
+                }
+            },
             bushes : {  look : function(){
-                return _gameMethods.getTextStringMap('Woods','somethingMoves')
+                return textStrings.somethingMoves()
             } },
             rocks: {
                 look: "You look at some nearby rocks. They're very rocky."
