@@ -239,7 +239,7 @@ The `consoleInterface` function is a way for cartridge actions to call the conso
 ```JavaScript
 exports.gameActions = {
 	take : function(game, command, consoleInterface){
-		return consoleInterface(game, command);
+		return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
 	}
 }
 ```
