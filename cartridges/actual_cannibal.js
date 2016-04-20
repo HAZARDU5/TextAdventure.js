@@ -82,6 +82,75 @@
      */
 
 var moment = require('moment');
+var Woods = require('./actual_cannibal/rooms/Woods.js');
+
+// === Helper Functions ===
+
+var gameMethods = {
+    getTimeOfDayAbstract: function(){
+
+        var timeString;
+
+        console.log('Current time: '+gameData.timeOfDay.toString());
+
+
+
+        var time8pm = new moment().set({hour:20,minute:0});
+        var time9pm = new moment().set({hour:21,minute:0});
+        var time5am = new moment().set({hour:5,minute:0});
+        var time6am = new moment().set({hour:6,minute:0});
+        var time12pm = new moment().set({hour:12,minute:0});
+        var time1pm = new moment().set({hour:13,minute:0});
+        var time6pm = new moment().set({hour:18,minute:0});
+
+        console.log('Is after 8pm?: '+gameData.timeOfDay.isAfter(time8pm));
+        console.log('Is before 9pm?: '+gameData.timeOfDay.isBefore(time9pm));
+
+        if(gameData.timeOfDay.isAfter(time8pm) && gameData.timeOfDay.isBefore(time9pm)){
+            console.log('It is dusk');
+            timeString = 'dusk'
+        }else if(gameData.timeOfDay.isAfter(time9pm) && gameData.timeOfDay.isBefore(time5am)){
+            timeString = 'night'
+        }else if(gameData.timeOfDay.isAfter(time5am) && gameData.timeOfDay.isBefore(time6am)){
+            timeString = 'dawn'
+        }else if(gameData.timeOfDay.isAfter(time6am) && gameData.timeOfDay.isBefore(time12pm)){
+            timeString = 'morning'
+        }else if(gameData.timeOfDay.isAfter(time12pm) && gameData.timeOfDay.isBefore(time1pm)){
+            timeString = 'midday'
+        }else if(gameData.timeOfDay.isAfter(time1pm) && gameData.timeOfDay.isBefore(time6pm)){
+            timeString = 'afternoon'
+        }else if(gameData.timeOfDay.isAfter(time6pm) && gameData.timeOfDay.isBefore(time8pm)){
+            timeString = 'evening'
+        }
+
+        console.log('Timestring: '+timeString);
+
+        return timeString;
+    },
+    getTimeOfDay: function(){
+        return gameData.timeOfDay.format('hh:mma');
+    },
+    incrementTimeOfDay: function(){
+        gameData.timeOfDay.add(5, 'minutes');
+    },
+    getCannibalLocation: function(){
+        return gameData.cannibalLocation;
+    },
+    getTextStringMap: function(mapRoom,string){
+
+        console.log(gameData);
+
+        return gameData.map[mapRoom].textStrings[string];
+    },
+    getTextStringItem: function(itemName,string){
+
+        console.log(gameData);
+        console.log(itemName);
+        console.log(string);
+
+        return gameData.itemStrings[itemName][string];
+    }
+}
 
 // === Game Data ===
 var gameData = {
@@ -117,64 +186,7 @@ var gameData = {
         lightSource : false
     },
     map : {
-        Woods : {
-            firstVisit : true,
-            displayName : 'Woods',
-            description : "You're walking in the woods.",
-            textStrings: {
-                somethingMoves: function(){
-                    if(getCannibalLocation() == 'Woods'){
-                        return "Out of the corner of your eye you spot him: Shia LaBeouf. He emerges from the bushes, " +
-                            "following you about 30 feet back."
-                    }else{
-                        return "You think you see something. But it turns out to be the wind rustling the trees."
-                    }
-                }
-            },
-            interactables : {
-                woods : { look : function(){
-                    return "There's no one around. " + (getCannibalLocation() == 'Woods') ? 'You feel a chill run up ' +
-                    'your spine; something moves in the bushes nearby!' : ''
-                } },
-                something : {  look : function(){
-                    return getTextStringMap('Woods','somethingMoves')
-                } },
-                bushes : {  look : function(){
-                    return getTextStringMap('Woods','somethingMoves')
-                } },
-            },
-            items : {
-
-            },
-            exits : {
-                north : {
-                    displayName : 'North',
-                    destination : 'woodsNorth'
-                },
-                south : {
-                    displayName : 'South',
-                    destination : 'woodsSouth'
-                },
-                east : {
-                    displayName : 'East',
-                    destination : 'woodsEast'
-                },
-                west : {
-                    displayName : 'West',
-                    destination : 'woodsWest'
-                }
-            },
-            setup: function(){
-
-            },
-            teardown: function(){
-
-            },
-            updateLocation: function(){
-                //this function is run every time an action is taken
-                incrementTimeOfDay();
-            }
-        }
+        Woods : new Woods(gameMethods)
     }
 };
 
@@ -188,7 +200,7 @@ var gameActions = {
 
         var outputString;
 
-        var timeString = getTimeOfDayAbstract();
+        var timeString = gameMethods.getTimeOfDayAbstract();
 
         console.log('TimeString: '+timeString);
 
@@ -239,73 +251,13 @@ var gameActions = {
 module.exports.gameData = gameData;
 module.exports.gameActions = gameActions;
 
-// === Helper Functions ===
-
-function getTimeOfDayAbstract(){
-
-    var timeString;
-
-    console.log('Current time: '+gameData.timeOfDay.toString());
 
 
 
-    var time8pm = new moment().set({hour:20,minute:0});
-    var time9pm = new moment().set({hour:21,minute:0});
-    var time5am = new moment().set({hour:5,minute:0});
-    var time6am = new moment().set({hour:6,minute:0});
-    var time12pm = new moment().set({hour:12,minute:0});
-    var time1pm = new moment().set({hour:13,minute:0});
-    var time6pm = new moment().set({hour:18,minute:0});
 
-    console.log('Is after 8pm?: '+gameData.timeOfDay.isAfter(time8pm));
-    console.log('Is before 9pm?: '+gameData.timeOfDay.isBefore(time9pm));
 
-    if(gameData.timeOfDay.isAfter(time8pm) && gameData.timeOfDay.isBefore(time9pm)){
-        console.log('It is dusk');
-        timeString = 'dusk'
-    }else if(gameData.timeOfDay.isAfter(time9pm) && gameData.timeOfDay.isBefore(time5am)){
-        timeString = 'night'
-    }else if(gameData.timeOfDay.isAfter(time5am) && gameData.timeOfDay.isBefore(time6am)){
-        timeString = 'dawn'
-    }else if(gameData.timeOfDay.isAfter(time6am) && gameData.timeOfDay.isBefore(time12pm)){
-        timeString = 'morning'
-    }else if(gameData.timeOfDay.isAfter(time12pm) && gameData.timeOfDay.isBefore(time1pm)){
-        timeString = 'midday'
-    }else if(gameData.timeOfDay.isAfter(time1pm) && gameData.timeOfDay.isBefore(time6pm)){
-        timeString = 'afternoon'
-    }else if(gameData.timeOfDay.isAfter(time6pm) && gameData.timeOfDay.isBefore(time8pm)){
-        timeString = 'evening'
-    }
 
-    console.log('Timestring: '+timeString);
 
-    return timeString;
-}
 
-function getTimeOfDay(){
-    return gameData.timeOfDay.format('hh:mma');
-}
 
-function incrementTimeOfDay(){
-    gameData.timeOfDay.add(5, 'minutes');
-}
 
-function getCannibalLocation(){
-    return gameData.cannibalLocation;
-}
-
-function getTextStringMap(mapRoom,string){
-
-    console.log(gameData);
-
-    return gameData.map[mapRoom].textStrings[string];
-}
-
-function getTextStringItem(itemName,string){
-
-    console.log(gameData);
-    console.log(itemName);
-    console.log(string);
-
-    return gameData.itemStrings[itemName][string];
-}
