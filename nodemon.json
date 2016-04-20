@@ -1,6 +1,6 @@
 {
   "verbose": true,
-  "ignore": ["node_modules/*","cartridges/*"],
+  "ignore": ["node_modules/*","cartridges/*","cartridges/**/*"],
   "execMap": {
     "js": "node"
   }
