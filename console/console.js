@@ -38,6 +38,9 @@ exports.input = function(input, gameID){
 				debug('-----'+interactionError);
 			}
 		}
+		if(typeof returnString === 'function'){
+			returnString = returnString();
+		}
 		if(returnString === undefined){
 			returnString = "I don't know how to do that.";
 		} else {
