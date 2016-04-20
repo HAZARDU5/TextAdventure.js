@@ -94,9 +94,26 @@ var gameData = {
                 "in-game time will advance by 5 minutes every action you take. This may affect your ability to see in " +
                 "the dark and will have hidden consequences as the game progresses....",
     outroText : 'Thanks for playing!',
+
+    itemStrings: {
+        watch: {
+            backlight: "You press the backlight button on the watch and a dim glow eminates from it."
+        }
+    },
+
     player : {
         currentLocation : 'Woods',
-        inventory : {},
+        inventory : {
+            watch: {
+                displayName: 'Watch',
+                description: "A plain wrist watch with a dim back-light. It's not very useful for seeing in the dark.",
+                use: function() { return "You look at the watch and press the backlight. A dim glow illuminates the watch. The time reads: " + getTimeOfDay()},
+                interactions: {
+                    //only default action overrides work here! - you can't define custom interactions - TODO: override the use command to allow this!
+                    take: "You pick up the watch and put it on your wrist." //required in order to successfully take the item
+                }
+            }
+        },
         lightSource : false
     },
     map : {
@@ -120,10 +137,10 @@ var gameData = {
                     'your spine; something moves in the bushes nearby!' : ''
                 } },
                 something : {  look : function(){
-                    return getTextString('Woods','somethingMoves')
+                    return getTextStringMap('Woods','somethingMoves')
                 } },
                 bushes : {  look : function(){
-                    return getTextString('Woods','somethingMoves')
+                    return getTextStringMap('Woods','somethingMoves')
                 } },
             },
             items : {
@@ -171,7 +188,7 @@ var gameActions = {
 
         var outputString;
 
-        var timeString = getTimeOfDay();
+        var timeString = getTimeOfDayAbstract();
 
         console.log('TimeString: '+timeString);
 
@@ -207,6 +224,14 @@ var gameActions = {
 
     wait: function(game,command,consoleInterface){
         return "You wait for a while...";
+    },
+
+    take: function(game,command,consoleInterface){
+        return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    use: function(game,command,consoleInterface){
+        return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
     }
 };
 
@@ -216,7 +241,7 @@ module.exports.gameActions = gameActions;
 
 // === Helper Functions ===
 
-function getTimeOfDay(){
+function getTimeOfDayAbstract(){
 
     var timeString;
 
@@ -257,6 +282,10 @@ function getTimeOfDay(){
     return timeString;
 }
 
+function getTimeOfDay(){
+    return gameData.timeOfDay.format('hh:mma');
+}
+
 function incrementTimeOfDay(){
     gameData.timeOfDay.add(5, 'minutes');
 }
@@ -265,9 +294,18 @@ function getCannibalLocation(){
     return gameData.cannibalLocation;
 }
 
-function getTextString(mapRoom,string){
+function getTextStringMap(mapRoom,string){
 
     console.log(gameData);
 
     return gameData.map[mapRoom].textStrings[string];
+}
+
+function getTextStringItem(itemName,string){
+
+    console.log(gameData);
+    console.log(itemName);
+    console.log(string);
+
+    return gameData.itemStrings[itemName][string];
 }
