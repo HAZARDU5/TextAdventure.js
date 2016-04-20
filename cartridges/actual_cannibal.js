@@ -204,8 +204,8 @@ var gameData = {
                 description: "A plain wrist watch with a dim back-light. It's not very useful for seeing in the dark.",
                 use: function() { return "You look at the watch and press the backlight. A dim glow illuminates the watch. The time reads: " + gameMethods.getTimeOfDay()},
                 interactions: {
-                    //only default action overrides work here! - you can't define custom interactions - TODO: override the use command to allow this!
-                    take: "You pick up the watch and put it on your wrist." //required in order to successfully take the item
+                    take: "You pick up the watch and put it on your wrist.", //a description or function is required in order to successfully take the item
+                    light: "You activate the watch light"
                 }
             }
         },
