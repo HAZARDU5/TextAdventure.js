@@ -74,17 +74,37 @@
      He's dodging every swipe, he parries to the left
      You counter to the right, you catch him in the neck
      You're chopping his head now
-     You have just decapitated Shia Labeouf
+     You have just decapitated Shia LaBeouf
 
      His head Topples to the floor, expressionless
      You fall to your knees and catch your breath
-     You're finally safe from Shia Labeouf ...
+     You're finally safe from Shia LaBeouf ...
      */
 
+var debug = true;
+
+// === Required Classes ===
+
 var moment = require('moment');
-var Woods = require('./actual_cannibal/rooms/Woods.js');
+
+// === Custom Required Classes ===
+
+var Woods = requireNoCache('./actual_cannibal/rooms/Woods.js');
+var Cannibal = requireNoCache('./actual_cannibal/npcs/Cannibal.js');
 
 // === Helper Functions ===
+
+function invalidateRequireCacheForFile(filePath){
+    delete require.cache[require.resolve(filePath)];
+}
+
+function requireNoCache(filePath){
+    if(debug){
+        invalidateRequireCacheForFile(filePath);
+    }
+
+    return require(filePath);
+}
 
 var gameMethods = {
     getTimeOfDayAbstract: function(){
@@ -134,7 +154,7 @@ var gameMethods = {
         gameData.timeOfDay.add(5, 'minutes');
     },
     getCannibalLocation: function(){
-        return gameData.cannibalLocation;
+        return gameData.cannibal.location;
     },
     getTextStringMap: function(mapRoom,string){
 
@@ -150,13 +170,19 @@ var gameMethods = {
 
         return gameData.itemStrings[itemName][string];
     }
-}
+};
+
+// === Game Class Instances ===
+
+var woods = new Woods(gameMethods);
+var cannibal = new Cannibal('Woods',gameMethods);
+
 
 // === Game Data ===
 var gameData = {
     commandCounter : 0,
     gameOver : false,
-    cannibalLocation: 'Woods',
+    cannibal: cannibal,
     timeOfDay: moment("20:05:00", "HH:mm:ss"),
     introText : "Welcome to Actual Cannibal, the Text Adventure game! This is loosely based on the horror-comedy " +
                 "song 'Actual Cannibal Shia LaBeouf' by Rob Cantor. This game supports time of day, meaning that the " +
@@ -186,7 +212,7 @@ var gameData = {
         lightSource : false
     },
     map : {
-        Woods : new Woods(gameMethods)
+        Woods : woods
     }
 };
 
@@ -244,20 +270,14 @@ var gameActions = {
 
     use: function(game,command,consoleInterface){
         return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    die: function(game,command,consoleInterface){
+        unloadAllClasses();
+        return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
     }
 };
 
 // === Necessary Exports ===
 module.exports.gameData = gameData;
 module.exports.gameActions = gameActions;
-
-
-
-
-
-
-
-
-
-
-
