@@ -388,8 +388,39 @@ function itemsToString(itemsObject){
 	return returnString;
 }
 
+/**
+ * Interact
+ *
+ * Interact with item or interactable in current location (must have interactables property otherwise falls back to
+ * picking object up!
+ *
+ * @param game
+ * @param interaction
+ * @param subject
+ * @returns {*}
+ */
 function interact(game, interaction, subject){
 	try{
+		return message = getCurrentLocation(game).items[subject].interactions[interaction];
+	} catch(error) {
+
+		console.log(error)
+
+		try{
+			return message = getCurrentLocation(game).interactables[subject][interaction];
+		} catch(error) {
+
+			console.log(error)
+
+			throw error
+		}
+
+
+	}
+
+
+	/*try{
+
 		if(getCurrentLocation(game).items[subject] === undefined && getCurrentLocation(game).interactables[subject] === undefined){
 			//interactable is not in current location - check if it is held item
 			if(game.player.inventory[subject] !== undefined){
@@ -405,8 +436,15 @@ function interact(game, interaction, subject){
 			return message = getCurrentLocation(game).items[subject].interactions[interaction];
 		}
 	} catch(error) {
-		return getCurrentLocation(game).interactables[subject][interaction];
-	}
+
+		try{
+			return getCurrentLocation(game).interactables[subject][interaction];
+		}catch(error){
+			console.log('Nothing worked!')
+		}
+
+	}*/
+
 }
 
 function moveItem(itemName, startLocation, endLocation){
