@@ -89,94 +89,31 @@ var moment = require('moment');
 
 // === Custom Required Classes ===
 
-var Woods = requireNoCache('./actual_cannibal/rooms/Woods.js');
-var Cannibal = requireNoCache('./actual_cannibal/npcs/Cannibal.js');
+// Classes
+var Utils = require('./actual_cannibal/classes/Utils.js'); //must always go first!
+var GameHelpers = (debug) ? Utils.requireNoCache('./GameHelpers.js') : require('./GameHelpers.js');
+
+// Rooms
+var Woods = (debug) ? Utils.requireNoCache('../rooms/Woods.js') : require('../rooms/Woods.js');
+
+// NPCs
+var Cannibal = (debug) ? Utils.requireNoCache('../npcs/Cannibal.js') : require('../npcs/Cannibal.js');
+
+// Items
+var Watch = (debug) ? Utils.requireNoCache('../items/Watch.js') : require('../items/Watch.js');
 
 // === Helper Functions ===
 
-function invalidateRequireCacheForFile(filePath){
-    delete require.cache[require.resolve(filePath)];
-}
-
-function requireNoCache(filePath){
-    if(debug){
-        invalidateRequireCacheForFile(filePath);
-    }
-
-    return require(filePath);
-}
-
-var gameMethods = {
-    getTimeOfDayAbstract: function(){
-
-        var timeString;
-
-        console.log('Current time: '+gameData.timeOfDay.toString());
-
-
-
-        var time8pm = new moment().set({hour:20,minute:0});
-        var time9pm = new moment().set({hour:21,minute:0});
-        var time5am = new moment().set({hour:5,minute:0});
-        var time6am = new moment().set({hour:6,minute:0});
-        var time12pm = new moment().set({hour:12,minute:0});
-        var time1pm = new moment().set({hour:13,minute:0});
-        var time6pm = new moment().set({hour:18,minute:0});
-
-        console.log('Is after 8pm?: '+gameData.timeOfDay.isAfter(time8pm));
-        console.log('Is before 9pm?: '+gameData.timeOfDay.isBefore(time9pm));
-
-        if(gameData.timeOfDay.isAfter(time8pm) && gameData.timeOfDay.isBefore(time9pm)){
-            console.log('It is dusk');
-            timeString = 'dusk'
-        }else if(gameData.timeOfDay.isAfter(time9pm) && gameData.timeOfDay.isBefore(time5am)){
-            timeString = 'night'
-        }else if(gameData.timeOfDay.isAfter(time5am) && gameData.timeOfDay.isBefore(time6am)){
-            timeString = 'dawn'
-        }else if(gameData.timeOfDay.isAfter(time6am) && gameData.timeOfDay.isBefore(time12pm)){
-            timeString = 'morning'
-        }else if(gameData.timeOfDay.isAfter(time12pm) && gameData.timeOfDay.isBefore(time1pm)){
-            timeString = 'midday'
-        }else if(gameData.timeOfDay.isAfter(time1pm) && gameData.timeOfDay.isBefore(time6pm)){
-            timeString = 'afternoon'
-        }else if(gameData.timeOfDay.isAfter(time6pm) && gameData.timeOfDay.isBefore(time8pm)){
-            timeString = 'evening'
-        }
-
-        console.log('Timestring: '+timeString);
-
-        return timeString;
-    },
-    getTimeOfDay: function(){
-        return gameData.timeOfDay.format('hh:mma');
-    },
-    incrementTimeOfDay: function(){
-        gameData.timeOfDay.add(5, 'minutes');
-    },
-    getCannibalLocation: function(){
-        return gameData.cannibal.location;
-    },
-    getTextStringMap: function(mapRoom,string){
-
-        console.log(gameData);
-
-        return gameData.map[mapRoom].textStrings[string];
-    },
-    getTextStringItem: function(itemName,string){
-
-        console.log(gameData);
-        console.log(itemName);
-        console.log(string);
-
-        return gameData.itemStrings[itemName][string];
-    }
-};
-
 // === Game Class Instances ===
 
-var woods = new Woods(gameMethods);
-var cannibal = new Cannibal('Woods',gameMethods);
+// Rooms
+var woods = new Woods();
 
+// NPCs
+var cannibal = new Cannibal('Woods');
+
+// Items
+var watch = new Watch();
 
 // === Game Data ===
 var gameData = {
@@ -199,15 +136,7 @@ var gameData = {
     player : {
         currentLocation : 'Woods',
         inventory : {
-            watch: {
-                displayName: 'Watch',
-                description: "A plain wrist watch with a dim back-light. It's not very useful for seeing in the dark.",
-                use: function() { return "You look at the watch and press the backlight. A dim glow illuminates the watch. The time reads: " + gameMethods.getTimeOfDay()},
-                interactions: {
-                    take: "You pick up the watch and put it on your wrist.", //a description or function is required in order to successfully take the item
-                    light: "You activate the watch light"
-                }
-            }
+            watch: watch
         },
         lightSource : false
     },
@@ -215,6 +144,8 @@ var gameData = {
         Woods : woods
     }
 };
+
+GameHelpers.setGameData(gameData);
 
 // === Game Actions ===
 var gameActions = {
@@ -226,7 +157,7 @@ var gameActions = {
 
         var outputString;
 
-        var timeString = gameMethods.getTimeOfDayAbstract();
+        var timeString = GameHelpers.getTimeOfDayAbstract(gameData);
 
         console.log('TimeString: '+timeString);
 
@@ -273,7 +204,6 @@ var gameActions = {
     },
 
     die: function(game,command,consoleInterface){
-        unloadAllClasses();
         return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
     }
 };

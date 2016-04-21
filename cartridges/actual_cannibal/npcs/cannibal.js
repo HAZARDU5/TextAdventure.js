@@ -1,8 +1,4 @@
-var _gameMethods;
-
-module.exports = function(defaultLocation,gameMethods){
-
-    _gameMethods = gameMethods;
+module.exports = function(defaultLocation){
 
     console.log('Created instance of Cannibal');
 

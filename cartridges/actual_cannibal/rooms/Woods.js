@@ -1,16 +1,17 @@
-var _gameMethods;
+var debug = true;
 
-module.exports = function(gameMethods){
+var Utils = require('../classes/Utils.js'); //must always go first!
+var GameHelpers = require('../classes/GameHelpers.js');
 
-    _gameMethods = gameMethods;
+module.exports = function(){
     
     console.log('Created instance of Woods');
 
-    console.log(_gameMethods);
+    console.log(GameHelpers);
 
-    var textStrings = {
+    var _textStrings = {
         somethingMoves: function(){
-            if(_gameMethods.getCannibalLocation() == 'Woods'){
+            if(GameHelpers.getCannibalLocation() == 'Woods'){
                 return "Out of the corner of your eye you spot him: Shia LaBeouf. He emerges from the bushes, " +
                     "following you about 30 feet back."
             }else{
@@ -32,13 +33,13 @@ module.exports = function(gameMethods){
                 look : function(){
                     console.log('Looking at something!');
 
-                    console.log('Gamemethods: ',_gameMethods);
+                    console.log('Gamemethods: ',GameHelpers);
 
-                    return textStrings.somethingMoves();
+                    return _textStrings.somethingMoves();
                 }
             },
             bushes : {  look : function(){
-                return textStrings.somethingMoves()
+                return _textStrings.somethingMoves()
             } },
             rocks: {
                 look: "You look at some nearby rocks. They're very rocky."
@@ -73,7 +74,7 @@ module.exports = function(gameMethods){
         },
         updateLocation: function(){
             //this function is run every time an action is taken
-            _gameMethods.incrementTimeOfDay();
+            GameHelpers.incrementTimeOfDay();
         }
     };
 };
