@@ -4,10 +4,6 @@ var Utils = require('../classes/Utils.js'); //must always go first!
 var GameHelpers = require('../classes/GameHelpers.js');
 
 module.exports = function(){
-    
-    console.log('Created instance of Woods');
-
-    console.log(GameHelpers);
 
     var _textStrings = {
         somethingMoves: function(){
@@ -22,48 +18,20 @@ module.exports = function(){
 
     return {
         firstVisit : true,
-        displayName : 'Woods',
-        description : "You're walking in the woods.",
+        displayName : 'Central Woods',
+        description : "You're walking in the woods. There's no one around. There are some bushes nearby.",
         interactables : {
-            //NOTE: look actions for interactables can only contain text strings
-            woods : {
-                look : "There's no one around."
-            },
-            something : {
-                look : function(){
-                    console.log('Looking at something!');
-
-                    console.log('Gamemethods: ',GameHelpers);
-
-                    return _textStrings.somethingMoves();
-                }
-            },
             bushes : {  look : function(){
                 return _textStrings.somethingMoves()
-            } },
-            rocks: {
-                look: "You look at some nearby rocks. They're very rocky."
-            }
+            } }
         },
         items : {
 
         },
         exits : {
-            north : {
-                displayName : 'North',
-                destination : 'woodsNorth'
-            },
-            south : {
-                displayName : 'South',
-                destination : 'woodsSouth'
-            },
             east : {
                 displayName : 'East',
                 destination : 'woodsEast'
-            },
-            west : {
-                displayName : 'West',
-                destination : 'woodsWest'
             }
         },
         setup: function(){

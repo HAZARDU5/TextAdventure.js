@@ -95,6 +95,8 @@ var GameHelpers = (debug) ? Utils.requireNoCache('./GameHelpers.js') : require('
 
 // Rooms
 var Woods = (debug) ? Utils.requireNoCache('../rooms/Woods.js') : require('../rooms/Woods.js');
+var WoodsEast = (debug) ? Utils.requireNoCache('../rooms/WoodsEast.js') : require('../rooms/WoodsEast.js');
+var Truck = (debug) ? Utils.requireNoCache('../rooms/Truck.js') : require('../rooms/Truck.js');
 
 // NPCs
 var Cannibal = (debug) ? Utils.requireNoCache('../npcs/Cannibal.js') : require('../npcs/Cannibal.js');
@@ -104,13 +106,32 @@ var Watch = (debug) ? Utils.requireNoCache('../items/Watch.js') : require('../it
 
 // === Helper Functions ===
 
+// === Text Strings ===
+
+var textStrings = {
+    help: "\nAvailable commands are:\n" +
+            "- help / commands (shows this help menu)\n" +
+            "- die (ends the game)\n" +
+            "- drop <item> (drops the specified item)\n" +
+            "- go / enter / exit <exit> (moves to the specified room exit)\n" +
+            "- inventory (shows your inventory)\n" +
+            "- load <game> (if not playing a game, loads the specified game)\n" +
+            "- look <thing> (look at specified thing)\n" +
+            "- take <item> (takes the specified item)\n" +
+            "- use <item> (uses the specified item in your inventory or room)\n" +
+            "- time (show the current time of day)\n" +
+            "- wait (wait 5 minutes of in-game time)\n"
+};
+
 // === Game Class Instances ===
 
 // Rooms
 var woods = new Woods();
+var woodsEast = new WoodsEast();
+var truck = new Truck();
 
 // NPCs
-var cannibal = new Cannibal('Woods');
+var cannibal = new Cannibal('woods');
 
 // Items
 var watch = new Watch();
@@ -134,14 +155,16 @@ var gameData = {
     },
 
     player : {
-        currentLocation : 'Woods',
+        currentLocation : 'truck',
         inventory : {
             watch: watch
         },
         lightSource : false
     },
     map : {
-        Woods : woods
+        woods : woods,
+        woodsEast : woodsEast,
+        truck : truck
     }
 };
 
@@ -196,6 +219,18 @@ var gameActions = {
     },
 
     take: function(game,command,consoleInterface){
+        return eval('consoleInterface.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    //alias for 'go'
+    enter: function(game,command,consoleInterface){
+        command.action = 'go'; //must set action to 'go' for alias to work
+        return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    //alias for 'go'
+    exit: function(game,command,consoleInterface){
+        command.action = 'go'; //must set action to 'go' for alias to work
         return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
     },
 
@@ -205,6 +240,14 @@ var gameActions = {
 
     die: function(game,command,consoleInterface){
         return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    help: function(game,command,consoleInterface){
+        return textStrings.help;
+    },
+
+    'commands': function(game,command,consoleInterface){
+        return textStrings.help;
     }
 };
 
