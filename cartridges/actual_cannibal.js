@@ -97,6 +97,7 @@ var GameHelpers = (debug) ? Utils.requireNoCache('./GameHelpers.js') : require('
 var Woods = (debug) ? Utils.requireNoCache('../rooms/Woods.js') : require('../rooms/Woods.js');
 var WoodsEast = (debug) ? Utils.requireNoCache('../rooms/WoodsEast.js') : require('../rooms/WoodsEast.js');
 var Truck = (debug) ? Utils.requireNoCache('../rooms/Truck.js') : require('../rooms/Truck.js');
+var GloveCompartment = (debug) ? Utils.requireNoCache('../rooms/GloveCompartment.js') : require('../rooms/GloveCompartment.js');
 
 // NPCs
 var Cannibal = (debug) ? Utils.requireNoCache('../npcs/Cannibal.js') : require('../npcs/Cannibal.js');
@@ -113,7 +114,7 @@ var textStrings = {
             "- help / commands (shows this help menu)\n" +
             "- die (ends the game)\n" +
             "- drop <item> (drops the specified item)\n" +
-            "- go / enter / exit <exit> (moves to the specified room exit)\n" +
+            "- go / enter / exit / open<exit> (moves to the specified exit in a room)\n" +
             "- inventory (shows your inventory)\n" +
             "- load <game> (if not playing a game, loads the specified game)\n" +
             "- look <thing> (look at specified thing)\n" +
@@ -129,6 +130,7 @@ var textStrings = {
 var woods = new Woods();
 var woodsEast = new WoodsEast();
 var truck = new Truck();
+var gloveCompartment = new GloveCompartment();
 
 // NPCs
 var cannibal = new Cannibal('woods');
@@ -164,7 +166,8 @@ var gameData = {
     map : {
         woods : woods,
         woodsEast : woodsEast,
-        truck : truck
+        truck : truck,
+        gloveCompartment : gloveCompartment
     }
 };
 
@@ -230,6 +233,12 @@ var gameActions = {
 
     //alias for 'go'
     exit: function(game,command,consoleInterface){
+        command.action = 'go'; //must set action to 'go' for alias to work
+        return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
+    },
+
+    //alias for 'go'
+    open: function(game,command,consoleInterface){
         command.action = 'go'; //must set action to 'go' for alias to work
         return eval('gameActions.'+command.action+'(game,command,consoleInterface)');
     },

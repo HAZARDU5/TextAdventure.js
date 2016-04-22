@@ -17,11 +17,9 @@ module.exports = function(){
         firstVisit : true,
         displayName : 'Inside the Old Truck',
         description : "You are inside the old truck. The seats are worn and tattered. It's quite dusty; you stifle a sneeze as you gaze around the " +
-                        "interior. You spot a couple of old magazines, a busted glovebox and an old combat knife.",
+                        "interior. The glove compartment is busted open and you see some things inside. There are also a few items lying on the front passenger seat.",
         interactables : {
-            bushes : {  look : function(){
-                return _textStrings.somethingMoves()
-            } }
+
         },
         items : {
             combatKnife : combatKnife
@@ -45,13 +43,23 @@ module.exports = function(){
                 displayName : 'the truck door',
                 destination : 'woodsEast',
                 hidden : true
+            },
+            'glove compartment' : {
+                displayName : 'the glove compartment',
+                destination : 'gloveCompartment',
+                hidden : true
+            },
+            'the glove compartment' : {
+                displayName : 'the glove compartment',
+                destination : 'gloveCompartment',
+                hidden : true
             }
         },
         setup: function(){
-            return "You grab the truck door handle. It creaks as your force it open. You carefully climb inside."
+
         },
         teardown: function(){
-            return "You grab the truck door handle. It creaks as you force it open. You carefully climb outside."
+
         },
         updateLocation: function(){
             //this function is run every time an action is taken
