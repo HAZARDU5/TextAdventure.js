@@ -17,7 +17,7 @@ module.exports = function(){
         firstVisit : true,
         displayName : 'Inside the Old Truck',
         description : "You are inside the old truck. The seats are worn and tattered. It's quite dusty; you stifle a sneeze as you gaze around the " +
-                        "interior. The glove compartment is busted open and you see some things inside. There are also a few items lying on the front passenger seat.",
+                        "interior. The glove compartment is busted open and you see some things inside. There is a pile of rubbish on the passenger seat.",
         interactables : {
 
         },
@@ -30,27 +30,8 @@ module.exports = function(){
                 destination : 'woodsEast',
                 hidden : true
             },
-            'the truck door' : {
-                displayName : 'the truck door',
-                destination : 'woodsEast'
-            },
-            'truck door' : {
-                displayName : 'the truck door',
-                destination : 'woodsEast',
-                hidden : true
-            },
-            'the door' : {
-                displayName : 'the truck door',
-                destination : 'woodsEast',
-                hidden : true
-            },
-            'glove compartment' : {
-                displayName : 'the glove compartment',
-                destination : 'gloveCompartment',
-                hidden : true
-            },
-            'the glove compartment' : {
-                displayName : 'the glove compartment',
+            compartment : {
+                displayName : 'Glove Compartment',
                 destination : 'gloveCompartment',
                 hidden : true
             }

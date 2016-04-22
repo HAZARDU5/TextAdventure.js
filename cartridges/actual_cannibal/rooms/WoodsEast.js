@@ -24,22 +24,8 @@ module.exports = function(){
                 displayName : 'West',
                 destination : 'woods'
             },
-            'The Rusty Truck' : {
-                displayName : 'The Rusty Truck',
-                destination : 'truck'
-            },
-            'Rusty Truck' : {
-                displayName : 'The Rusty Truck',
-                destination : 'truck',
-                hidden : true
-            },
-            'The Truck' : {
-                displayName : 'The Rusty Truck',
-                destination : 'truck',
-                hidden : true
-            },
             truck : {
-                displayName : 'The Rusty Truck',
+                displayName : 'Rusty Truck',
                 destination : 'truck',
                 hidden : true
             }

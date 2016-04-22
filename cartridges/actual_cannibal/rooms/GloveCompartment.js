@@ -16,7 +16,7 @@ module.exports = function(){
     return {
         firstVisit : true,
         displayName : 'The Glove Compartment',
-        description : "Inside the glove compartment you find a bunch of junk.",
+        description : "Inside the glove compartment you find a bunch of junk. You can exit the compartment.",
         interactables : {
             bushes : {  look : function(){
                 return _textStrings.somethingMoves()
@@ -26,22 +26,8 @@ module.exports = function(){
             oldCandy : oldCandy
         },
         exits : {
-            'the truck interior' : {
-                displayName : 'the truck interior',
-                destination : 'truck'
-            },
-            'truck interior' : {
-                displayName : 'the truck interior',
-                destination : 'truck',
-                hidden: true
-            },
-            'truck' : {
-                displayName : 'the truck interior',
-                destination : 'truck',
-                hidden: true
-            },
-            'the truck' : {
-                displayName : 'the truck interior',
+            compartment : {
+                displayName : 'Truck Interior',
                 destination : 'truck',
                 hidden: true
             }
