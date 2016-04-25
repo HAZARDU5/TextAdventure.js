@@ -24,6 +24,14 @@ OR run the following to automatically reload the application when something chan
 nodemon server.js
 ```
 
+## Unit Tests
+
+Tests can be run using the following command:
+
+`npm test PATH_TO_TEST`
+
+Where `PATH_TO_TEST` is the path to the test file that you wish to run. E.g. `npm test test/console.test.js`.
+
 ## Terminal
 
 The Terminal consists of a single HTML file, a single CSS file and two JavaScript files (one of which is jQuery in case you need to run TextAdventure.js without an Internet connection). The Terminal's main job is to send the user's input to the Server and then display the Server's response to the user. The terminal has a few other creature comforts built in. First, it sends a "dummy" AJAX call to the server when the page loads to get the list of cartridges without requiring the user to input anything. Secondly, it keeps a record of the user's input that can be navigated via the UP and DOWN arrow keys. The terminal's CSS can easily be tweaked to your liking.

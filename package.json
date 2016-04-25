@@ -10,7 +10,8 @@
   "license": "MIT License",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodaemon server.js",
+    "test": "mocha"
   },
   "files": [
     "server.js",
@@ -30,8 +31,14 @@
     "open": "^0.0.5"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "chokidar": "^1.4.3",
     "connect-livereload": "^0.5.4",
-    "livereload": "^0.4.1"
+    "livereload": "^0.4.1",
+    "mocha": "^2.4.5",
+    "mockery": "^1.6.2",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.3"
   }
+
 }
