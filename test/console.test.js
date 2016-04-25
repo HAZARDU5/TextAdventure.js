@@ -1,8 +1,22 @@
 var expect = require('chai').expect,
+    sinon = require('sinon'),
     rewire = require("rewire");
 
 var con = rewire("../console/console.js");
-var testGame = rewire('./cartridges/test');
+//var testGame = rewire('./cartridges/test');
+var sandbox = sinon.sandbox.create();
+var gameStub = sandbox.stub({
+    gameData: {
+        commandCounter : 0,
+        gameOver : false,
+        introText : 'a',
+        outroText : 'b',
+        player : {},
+        map: {}
+    },
+
+    gameActions: {}
+});
 
 describe('Console', function() {
 
@@ -18,26 +32,39 @@ describe('Console', function() {
 
     afterEach(function() {
         // The beforeEach() callback gets run after each test in the suite.
+        sandbox.verifyAndRestore(); // Verify all Sinon mocks have been honored
     });
 
     after(function() {
         // after() is run after all your tests have completed. Do teardown here.
     });
 
-    describe('input', function() {
+    describe('input look command', function() {
 
         //our assertations here
 
-        // uses set variables above when running module method
-
         it('should return successful string', function() {
 
-            var revertRoom1ExitsRoom2Hidden = testGame.__set__("gameData.map.room1.exits.room2.hidden", true);
-            var revertTestGame = con.__set__("games", {testGame: testGame});
+            gameStub.gameData.map = sandbox.stub({
 
-            expect(con.input('look','testGame')).to.equal('Room1 description');
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b'
+                }
 
-            revertRoom1ExitsRoom2Hidden();
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1'
+            });
+
+            console.log('gamestub',gameStub);
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('look','testGame')).to.equal('b');
+
             revertTestGame();
         });
     });

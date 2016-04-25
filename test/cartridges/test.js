@@ -16,7 +16,7 @@ var gameData = {
         room1 : {
             firstVisit : true,
             displayName : 'Room1',
-            description : 'Room1 description',
+            description : 'b',
             interactables : {
                 interactable1 : { look : 'Interactable1 description' }
             },
@@ -34,6 +34,15 @@ var gameData = {
                     displayName : 'Room2',
                     destination : 'room2'
                 }
+            },
+            setup: function(){
+
+            },
+            teardown: function(){
+
+            },
+            updateLocation: function(){
+
             }
         },
         room2 : {
