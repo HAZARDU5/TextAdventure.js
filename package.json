@@ -36,9 +36,7 @@
     "connect-livereload": "^0.5.4",
     "livereload": "^0.4.1",
     "mocha": "^2.4.5",
-    "mockery": "^1.6.2",
-    "rewire": "^2.5.1",
-    "sinon": "^1.17.3"
+    "rewire": "^2.5.1"
   }
 
 }
