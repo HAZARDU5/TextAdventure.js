@@ -24,13 +24,14 @@ OR run the following to automatically reload the application when something chan
 nodemon server.js
 ```
 
-## Unit Tests
+## Tests
 
 Tests can be run using the following command:
 
 `npm test PATH_TO_TEST`
 
-Where `PATH_TO_TEST` is the path to the test file that you wish to run. E.g. `npm test test/console.test.js`.
+Where `PATH_TO_TEST` is the path to the test file that you wish to run. E.g. `npm test test/console.test.js`. These will
+validate that the project code behaves as expected.
 
 ## Terminal
 

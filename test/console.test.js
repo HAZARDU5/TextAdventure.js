@@ -71,7 +71,7 @@ describe('Console', function() {
     //can only take items in the current room
     describe('input take command', function() {
 
-        it('should return c taken', function() {
+        it('should return c when taken', function() {
 
             gameStub.gameData.map = sandbox.stub({
 
@@ -283,4 +283,46 @@ describe('Console', function() {
             revertTestGame();
         });
     });
+
+    describe('input go direction command', function() {
+
+        it('should return d when room2 is described', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {},
+                    exits : {
+                        c : {
+                            displayName : 'c',
+                            destination : 'room2',
+                            hidden : true
+                        }
+                    }
+                },
+                room2: {
+                    firstVisit : true,
+                    displayName : 'c',
+                    description : 'd',
+                    items : {}
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {}
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('go c','testGame')).to.equal('d');
+
+            revertTestGame();
+        });
+    });
+
 });
