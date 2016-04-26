@@ -39,11 +39,10 @@ describe('Console', function() {
         // after() is run after all your tests have completed. Do teardown here.
     });
 
+    //look command should return the current room description
     describe('input look command', function() {
 
-        //our assertations here
-
-        it('should return successful string', function() {
+        it('should return b when room is described', function() {
 
             gameStub.gameData.map = sandbox.stub({
 
@@ -64,6 +63,222 @@ describe('Console', function() {
             var revertTestGame = con.__set__("games", {testGame: gameStub});
 
             expect(con.input('look','testGame')).to.equal('b');
+
+            revertTestGame();
+        });
+    });
+
+    //can only take items in the current room
+    describe('input take command', function() {
+
+        it('should return c taken', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {
+                        c : {
+                            displayName : 'c',
+                            description : 'd',
+                            quantity : 1
+                        }
+                    }
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : { //inventory object must be set in order for test to work
+
+                }
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('take c','testGame')).to.equal('c taken');
+
+            revertTestGame();
+        });
+    });
+
+    //use items in inventory or current room
+    describe('input use item command', function() {
+
+        it('should return e when used', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {}
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {
+                    c : {
+                        displayName : 'c',
+                        description : 'd',
+                        use: function(){
+                            return "e"
+                        },
+                        quantity : 1
+                    }
+                }
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('use c','testGame')).to.equal('e');
+
+            revertTestGame();
+        });
+
+        it('should return error when c is used - not in inventory', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {
+                        c : {
+                            displayName : 'c',
+                            description : 'd',
+                            use: function(){
+                                return "e"
+                            },
+                            quantity : 1
+                        }
+                    }
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {}
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('use c','testGame')).to.equal("Can't do that.");
+
+            revertTestGame();
+        });
+    });
+
+    //interact with items
+    describe('input interact item command', function() {
+
+        it('should return error when interacted in inventory', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {}
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {
+                    c : {
+                        displayName : 'c',
+                        description : 'd',
+                        interactions : {
+                            interaction1: "e"
+                        },
+                        quantity : 1
+                    }
+                }
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('interaction1 c','testGame')).to.equal("I don't know how to do that.");
+
+            revertTestGame();
+        });
+
+        it('should return e when interacted - not in inventory', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {
+                        c : {
+                            displayName : 'c',
+                            description : 'd',
+                            interactions : {
+                                interaction1: "e"
+                            },
+                            quantity : 1
+                        }
+                    }
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {}
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('interaction1 c','testGame')).to.equal('e');
+
+            revertTestGame();
+        });
+    });
+
+    //can only drop item in player's inventory
+    describe('input drop inventory item command', function() {
+
+        it('should return c dropped', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {}
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {
+                    c : {
+                        displayName : 'c',
+                        description : 'd',
+                        quantity : 1
+                    }
+                }
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('drop c','testGame')).to.equal('c dropped');
 
             revertTestGame();
         });
