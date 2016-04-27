@@ -12,17 +12,34 @@ You must have node.js installed on your development machine or server.
 
 ## Server
 
-The server is an extremely simple Node.js file. It fires up an instance of an Express server on port 3000 to which it serves the Terminal. All AJAX requests made to it are quickly passed to the Console to be executed. Responses are then dispatched back to the Terminal. To get TextAdventure up and running on port 3000 simply run the following command from the project's folder:
+The server is an extremely simple Node.js file. It fires up an instance of an Express server on port 3000 to which it 
+serves the Terminal. All AJAX requests made to it are quickly passed to the Console to be executed. Responses are then 
+dispatched back to the Terminal. To get TextAdventure up and running on port 3000 simply run the following command from 
+the project's folder:
 
 ```
 node server.js
 ```
 
-OR run the following to automatically reload the application when something changes
+OR run the following to automatically reload the application when something changes:
 
 ```
 nodemon server.js
 ```
+
+Note this excludes changes made to cartridge files. `server.js` will use `livereload` to automatically trigger a reload 
+of the terminal when files in the `cartridges` folder are modified. By adding the following to the callback of the 
+initial `get games` command in `terminal.js` you can have a cartridge automatically load on startup of the terminal:
+
+```
+messageServer('get games',function(){
+	messageServer('die',function(){
+		messageServer('load YOUR_CARTRIDGE');
+	});
+});
+```
+
+where `YOUR_CARTRIDGE` is the name of your cartridge.
 
 ## Tests
 
