@@ -325,4 +325,44 @@ describe('Console', function() {
         });
     });
 
+    describe('input die command', function() {
+
+        it('should return You are dead', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {}
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : {}
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('die','testGame')).to.equal('You are dead');
+
+            revertTestGame();
+        });
+    });
+
+    describe('input load command', function() {
+
+        it('should return gold_mine intro', function() {
+
+            var revertTestGame = con.__set__("games", {});
+
+            expect(con.input('load gold_mine','testGame')).to.equal('Welcome to the Crooked Gulch Gold Mine. What it lacks in safety precautions it more than makes up for in gold. Watch your step and you might just make it out with riches beyond your wildest imagination!\nYou stand at the partially collapsed entrance to the mine. Nearby there is a sign sticking out of a pile of miner helmets. Exit is Inside.');
+
+            revertTestGame();
+        });
+    });
+
 });
