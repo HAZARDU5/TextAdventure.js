@@ -325,6 +325,9 @@ describe('Console', function() {
 
             expect(con.input('drop c','testGame')).to.equal('c dropped');
 
+            //confirm item was actually dropped into room
+            expect(gameStub.gameData.map.room1.items.c.quantity).to.equal(1);
+
             revertTestGame();
         });
     });
@@ -365,6 +368,9 @@ describe('Console', function() {
             var revertTestGame = con.__set__("games", {testGame: gameStub});
 
             expect(con.input('go c','testGame')).to.equal('d');
+
+            //check that player is actually moved to room2
+            expect(gameStub.gameData.player.currentLocation).to.equal('room2');
 
             revertTestGame();
         });

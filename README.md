@@ -28,10 +28,16 @@ nodemon server.js
 
 Tests can be run using the following command:
 
-`npm test PATH_TO_TEST`
+`npm run test`
 
-Where `PATH_TO_TEST` is the path to the test file that you wish to run. E.g. `npm test test/console.test.js`. These will
-validate that the project code behaves as expected.
+Tests placed in the `test` folder will automatically be run whn the above command is triggered e.g `test/console.test.js`. 
+These will validate that the project code behaves as expected.
+
+Tests can also be run continuously by running the following command. This will watch the project files for any changes:
+
+`npm run testwatch`
+
+You may also run `nodemon server.js` concurrently while tests are running.
 
 ## Terminal
 

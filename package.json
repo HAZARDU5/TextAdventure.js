@@ -11,7 +11,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodaemon server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "testwatch": "nodemon node_modules/mocha/bin/mocha"
   },
   "files": [
     "server.js",
