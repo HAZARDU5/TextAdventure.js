@@ -71,7 +71,8 @@ describe('Console', function() {
     //can only take items in the current room
     describe('input take command', function() {
 
-        it('should return c when taken', function() {
+        //take single item
+        it('should return c taken when item is taken', function() {
 
             gameStub.gameData.map = sandbox.stub({
 
@@ -100,6 +101,50 @@ describe('Console', function() {
             var revertTestGame = con.__set__("games", {testGame: gameStub});
 
             expect(con.input('take c','testGame')).to.equal('c taken');
+
+            expect(gameStub.gameData.map.room1.items.c).to.equal(undefined);
+
+            expect(gameStub.gameData.player.inventory.c.quantity).to.equal(1);
+
+            revertTestGame();
+        });
+
+        //test taking a single copy of an item in a room with multiple copies. single copy should remain
+        it('should return c taken when item is taken and 1 copy is in inventory and 1 copy remains in room', function() {
+
+            gameStub.gameData.map = sandbox.stub({
+
+                room1: {
+                    firstVisit : true,
+                    displayName : 'a',
+                    description : 'b',
+                    items : {
+                        c : {
+                            displayName : 'c',
+                            description : 'd',
+                            quantity : 2
+                        }
+                    }
+                }
+
+            });
+
+            gameStub.gameData.player = sandbox.stub({
+                currentLocation : 'room1',
+                inventory : { //inventory object must be set in order for test to work
+
+                }
+            });
+
+            var revertTestGame = con.__set__("games", {testGame: gameStub});
+
+            expect(con.input('take c','testGame')).to.equal('c taken');
+
+            //check room has 1 copy of item c left
+            expect(gameStub.gameData.map.room1.items.c.quantity).to.equal(1);
+
+            //check player has 1 copy of item c in inventory
+            expect(gameStub.gameData.player.inventory.c.quantity).to.equal(1);
 
             revertTestGame();
         });
