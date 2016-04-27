@@ -1,7 +1,13 @@
 {
   "verbose": true,
-  "ignore": ["node_modules/*","cartridges/*","cartridges/**/*"],
+  "ignore": [
+    "node_modules/*"
+  ],
   "execMap": {
     "js": "node"
-  }
+  },
+  "events": {
+    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+  },
+  "ext": "js json"
 }
