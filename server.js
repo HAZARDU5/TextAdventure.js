@@ -22,7 +22,7 @@ var con = require('./console/console.js');
 
 if(debugMode) {
 	app.use(require('connect-livereload')({
-		port: 35729,
+		port: 8081,
 		ignore: ['.md', '.txt']
 	}));
 }
@@ -34,8 +34,8 @@ app.use(express.static(__dirname + '/terminal'));
 app.use(session({secret: '1234567890QWERTY', resave: false, saveUninitialized: true}));
 
 // === Start Server ===
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+var server_port = process.env.PORT || 3000;
+var server_ip_address = process.env.IP || '127.0.0.1'
 var server = app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
@@ -44,7 +44,7 @@ var server = app.listen(server_port, server_ip_address, function () {
 
 // // === Open Browser ===
 var open = require('open');
-open('http://localhost:3000');
+open('https://text-adventure-hazardu5.c9users.io:8080');
 
 // === Respond to AJAX calls ===
 app.post('/console', function(req,res){

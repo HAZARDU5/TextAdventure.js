@@ -99,6 +99,8 @@ var WoodsEast = (debug) ? Utils.requireNoCache('../rooms/WoodsEast.js') : requir
 var Truck = (debug) ? Utils.requireNoCache('../rooms/Truck.js') : require('../rooms/Truck.js');
 var GloveCompartment = (debug) ? Utils.requireNoCache('../rooms/GloveCompartment.js') : require('../rooms/GloveCompartment.js');
 
+console.log('Dirname',__dirname);
+
 // NPCs
 var Cannibal = (debug) ? Utils.requireNoCache('../npcs/Cannibal.js') : require('../npcs/Cannibal.js');
 
