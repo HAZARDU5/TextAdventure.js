@@ -220,6 +220,8 @@ An item's `quantityy` must be a non-negative int. The `quantity` keeps track of 
 
 The `use()` function will run then the user issues the 'use' command and names the item as the item as the subject. The use function an execute any arbitrary code but must return a string that will be displayed to the user.
 
+Note: the `use` property on the item object MUST be a function that returns a string. Attempts to set `use` to a string value directly will cause using the item to fail when the player attempts it.
+
 **`interactions` Object**
 
 The `interactions` Object of an item is identical to an `interactables` object of a location except that it is tied to the item and will move with said item.
