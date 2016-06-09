@@ -40,12 +40,6 @@ var server = app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
 
-
-
-// // === Open Browser ===
-var open = require('open');
-open('https://text-adventure-hazardu5.c9users.io:8080');
-
 // === Respond to AJAX calls ===
 app.post('/console', function(req,res){
 	debug(req.body.input);

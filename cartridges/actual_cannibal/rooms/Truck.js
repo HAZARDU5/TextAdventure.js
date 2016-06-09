@@ -26,10 +26,10 @@ module.exports = function(){
             combatKnife : combatKnife
         },
         exits : {
-            door : {
-                displayName : 'Truck Door',
+            outside : {
+                displayName : 'Outside',
                 destination : 'woodsEast',
-                hidden : true
+                hidden : false
             },
             compartment : {
                 displayName : 'Glove Compartment',

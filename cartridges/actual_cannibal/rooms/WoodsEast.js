@@ -12,7 +12,7 @@ module.exports = function(){
     return {
         firstVisit : true,
         displayName : 'East Woods',
-        description : "You're walking in the woods. There's no one around. There is a rusting old pick up truck tangled in the undergrowth.",
+        description : "You're walking in the woods. There's no one around. There is a rusting Old Truck tangled in the undergrowth.",
         interactables : {
             truck : {  look : "It's pretty rusty" }
         },
@@ -26,6 +26,11 @@ module.exports = function(){
             },
             truck : {
                 displayName : 'Rusty Truck',
+                destination : 'truck',
+                hidden : true
+            },
+            truck2 : {
+                displayName : 'Old Truck',
                 destination : 'truck',
                 hidden : true
             }
